@@ -1,0 +1,8 @@
+{
+    "cmake.configureSettings": {
+        "CMAKE_INSTALL_PREFIX" : "../install",
+        "CMAKE_CXX_STANDARD" : "17",
+        "BUILD_TESTING" : "TRUE",     
+        "BUILD_SHARED_LIBS" : "TRUE",   
+    }
+}

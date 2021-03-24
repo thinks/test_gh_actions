@@ -1,0 +1,5 @@
+get_filename_component(TPH_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+if(NOT TARGET tph::foo AND NOT TARGET tph::bar)
+    include("${TPH_CMAKE_DIR}/@PROJECT_NAME@Targets.cmake")
+endif()
