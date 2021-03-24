@@ -27,7 +27,9 @@ jobs:
         run: |
           git config --global user.name 'Nihil Nomen'
           git config --global user.email 'nn@gmail.com'
-          sed -i -E "s/(\s+\"version\":)(.*,)/\1 \"${SOURCE_TAG}\",/g" VERSION.txt
+         # sed -i -E "s/(\s+\"version\":)(.*,)/\1 \"${SOURCE_TAG}\",/g" VERSION.txt
+          rm VERSION.txt
+          echo ${SOURCE_TAG} > VERSION.txt
           git commit -am "Automated Version Up: ${SOURCE_TAG}"
           git tag ${SOURCE_TAG} -f
           git push origin HEAD:master
