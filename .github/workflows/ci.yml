@@ -38,7 +38,7 @@ jobs:
       - name: Create Artifact
         id: create_artifact
         run: |
-          NAME = tph-${SOURCE_TAG}.tar.gz
+          NAME=tph-${SOURCE_TAG}.tar.gz
           tar -zcvf $NAME -C tph/INSTALL .
           echo ::set-output name=ARTIFACT_NAME::$NAME
         env:
