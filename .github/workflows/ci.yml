@@ -35,10 +35,19 @@ jobs:
             tph
       - name: Build 
         run: cmake --build tph/BUILD --target install 
-      - name: Create Artefacts
-        run: tar -zcvf tph-${SOURCE_TAG}.tar.gz -C tph/INSTALL .
+      - name: Create Artifact
+        id: create_artifact
+        run: |
+          NAME = tph-${SOURCE_TAG}.tar.gz
+          tar -zcvf $NAME -C tph/INSTALL .
+          echo ::set-output name=ARTIFACT_NAME::$NAME
         env:
           SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
+      - name: Debug Artifact Name
+        run: |
+          echo $ARTIFACT_NAME
+        env: 
+          ARTIFACT_NAME: ${{ steps.create_artifact.outputs.ARTIFACT_NAME }}
 #      - name: Version up
 #        run: |
 #          git config --global user.name 'Nihil Nomen'

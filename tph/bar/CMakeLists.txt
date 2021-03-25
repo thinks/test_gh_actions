@@ -17,3 +17,16 @@ install(
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+if(BUILD_TESTING)
+  add_executable(bar_test)
+  target_sources(bar_test 
+    PRIVATE "bar_test.cc"
+  )
+  target_link_libraries(bar_test 
+    PRIVATE
+      tph::bar 
+      Catch2::Catch2
+  )
+  add_test(NAME bar_test COMMAND bar_test)
+endif()
