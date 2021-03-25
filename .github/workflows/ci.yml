@@ -36,7 +36,7 @@ jobs:
       - name: Build 
         run: cmake --build tph/BUILD --target install 
       - name: Create Artefacts
-        run: tar -zcvf tph-${SOURCE_TAG}.tar.gz tph/INSTALL
+        run: tar -zcvf tph-${SOURCE_TAG}.tar.gz -C tph/INSTALL .
         env:
           SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
 #      - name: Version up
