@@ -9,14 +9,21 @@ jobs:
       - name: Ref Names
         id: ref_names
         run: |
+          echo "source_name=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "source_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "source_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
           echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
           echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
       - name: Debug Ref Names
         run: |
           echo $SOURCE_NAME
+          echo ${{ env.source_name }}
           echo $SOURCE_BRANCH
+          echo ${{ env.source_branch }}
           echo $SOURCE_TAG
+          echo ${{ env.source_tag }}
         env:
           SOURCE_NAME: ${{ steps.ref_names.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.ref_names.outputs.SOURCE_BRANCH }}
@@ -35,10 +42,12 @@ jobs:
             tph
       - name: Build 
         run: cmake --build tph/BUILD --target install 
+      - name: Artifact Name
+        run: echo "artifact_name=tph-${SOURCE_TAG}.tar.gz" >> $GITHUB_ENV
       - name: Create Artifact
         id: create_artifact
         run: |
-          NAME=tph-${SOURCE_TAG}.tar.gz
+          echo "artifact_name=tph-${SOURCE_TAG}.tar.gz" >> $GITHUB_ENV
           tar -zcvf $NAME -C tph/INSTALL .
           echo ::set-output name=ARTIFACT_NAME::$NAME
         env:
