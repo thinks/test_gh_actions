@@ -34,8 +34,11 @@ jobs:
             -DBUILD_TESTING=TRUE \
             tph
       - name: Build 
-        run: cmake --build tph/BUILD --target all 
-
+        run: cmake --build tph/BUILD --target install 
+      - name: Create Artefacts
+        run: tar -zcvf tph-${SOURCE_TAG}.tar.gz tph/INSTALL
+        env:
+          SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
 #      - name: Version up
 #        run: |
 #          git config --global user.name 'Nihil Nomen'
@@ -48,9 +51,9 @@ jobs:
 #          git push -f origin ${SOURCE_TAG}
 #        env:
 #          SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
-#      - name: Upload the artifacts
-#        uses: skx/github-action-publish-binaries@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          args: 'rez-dev-env-*.vsix'
+      - name: Upload Artifacts
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: 'tph-*.tar.gz'
