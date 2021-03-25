@@ -6,8 +6,6 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Ref Names
         id: ref_names
         run: |
@@ -23,18 +21,33 @@ jobs:
           SOURCE_NAME: ${{ steps.ref_names.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.ref_names.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
-      - name: Version up
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: 'tph'
+      - name: Configure
         run: |
-          git config --global user.name 'Nihil Nomen'
-          git config --global user.email 'nn@gmail.com'
-          rm VERSION.txt
-          echo ${SOURCE_TAG} > VERSION.txt
-          git commit -am "Automated Version Up: ${SOURCE_TAG}"
-          git tag ${SOURCE_TAG} -f
-          git push origin HEAD:master
-          git push -f origin ${SOURCE_TAG}
-        env:
-          SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
+          cmake -B tph/BUILD \
+            -DCMAKE_CXX_STANDARD=17 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=tph/INSTALL \
+            -DBUILD_TESTING=TRUE \
+            tph
+      - name: Build 
+        run: cmake --build tph/BUILD --target all 
+
+#      - name: Version up
+#        run: |
+#          git config --global user.name 'Nihil Nomen'
+#          git config --global user.email 'nn@gmail.com'
+#          rm VERSION.txt
+#          echo ${SOURCE_TAG} > VERSION.txt
+#          git commit -am "Automated Version Up: ${SOURCE_TAG}"
+#          git tag ${SOURCE_TAG} -f
+#          git push origin HEAD:master
+#          git push -f origin ${SOURCE_TAG}
+#        env:
+#          SOURCE_TAG: ${{ steps.ref_names.outputs.SOURCE_TAG }}
 #      - name: Upload the artifacts
 #        uses: skx/github-action-publish-binaries@master
 #        env:
