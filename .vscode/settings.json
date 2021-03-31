@@ -1,9 +1,9 @@
 {
     "cmake.configureSettings": {
-        "CMAKE_VERBOSE_MAKEFILE" : "TRUE",
-        "CMAKE_INSTALL_PREFIX" : "../install",
         "CMAKE_CXX_STANDARD" : "17",
+        "CMAKE_INSTALL_PREFIX" : "../install",
         "BUILD_TESTING" : "TRUE",     
+        "CMAKE_VERBOSE_MAKEFILE" : "TRUE",
         //"BUILD_SHARED_LIBS" : "FALSE",   
     },
     "files.associations": {
