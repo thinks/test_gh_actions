@@ -64,14 +64,20 @@ if(NOT fftw_POPULATED)
               --build-noclean
               --build-options   ${fftw_CACHE_ARGS}
       WORKING_DIRECTORY ${fftw_SOURCE_DIR}
-      OUTPUT_FILE       ${fftw_BINARY_DIR}/build_output_f.log
-      ERROR_FILE        ${fftw_BINARY_DIR}/build_output_f.log
-      RESULT_VARIABLE   result_f
+      OUTPUT_FILE       ${fftw_BINARY_DIR}/build_output.log
+      ERROR_FILE        ${fftw_BINARY_DIR}/build_output.log
+      RESULT_VARIABLE   result
     )
     message(STATUS "FFTW<float> build complete")
-    if(result_f)
-      message(FATAL_ERROR "Failed FFTW<float> build, see build log at:\n"
-        "    ${fftw_BINARY_DIR}/build_output_f.log")
+    #if(result)
+    if(result)
+      #message(FATAL_ERROR "Failed FFTW<float> build, see build log at:\n"
+      #  "    ${fftw_BINARY_DIR}/build_output.log")
+      file(READ ${fftw_BINARY_DIR}/build_output.log fftw_log)
+      message(FATAL_ERROR ${fftw_log})
+      #execute_process(COMMAND ${CMAKE_COMMAND} -E cat ${fftw_BINARY_DIR}/build_output.log
+      #  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+      #)  
     endif()
   endif()
 endif()
