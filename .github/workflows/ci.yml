@@ -29,7 +29,8 @@ jobs:
             -DCMAKE_CXX_STANDARD=17 \
             -DCMAKE_INSTALL_PREFIX=tph/INSTALL \
             -DBUILD_TESTING=TRUE \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_FFTW_BUILD_LOG=TRUE \
             tph
       - name: Build 
         run: cmake --build tph/BUILD --target install 

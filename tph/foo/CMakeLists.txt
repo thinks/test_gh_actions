@@ -11,9 +11,9 @@ target_include_directories(foo
 )
 target_link_libraries(foo
   PUBLIC
-    FFTW::Float
-    Threads::Threads
-    "-lm"
+    FFTW3::fftw3f
+    #Threads::Threads
+    #"-lm"
 )
 add_library(tph::foo ALIAS foo)
 

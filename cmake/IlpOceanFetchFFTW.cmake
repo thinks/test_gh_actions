@@ -11,23 +11,29 @@ if(NOT fftw_POPULATED)
   FetchContent_Populate(fftw)
 
   option(ENABLE_FFTW_BUILD "Enable reconfiguring and rerunning the FFTW build" ON)
+  option(ENABLE_FFTW_BUILD_LOG "Print the FFTW build log to the console" OFF)
   if (ENABLE_FFTW_BUILD)
     set(fftw_CACHE_ARGS         
       "-DCMAKE_INSTALL_PREFIX=${fftw_BINARY_DIR}/install"
       "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON" # PIC
-      #"-DCMAKE_CXX_FLAGS:STRING=-D_GLIBCXX_USE_CXX11_ABI=0" # ABI
-      "-DENABLE_FLOAT:BOOL=ON" # Float!
-      "-DENABLE_THREADS:BOOL=ON"
-      "-DWITH_COMBINED_THREADS:BOOL=ON"
-      "-DBUILD_TESTS:BOOL=OFF" # ON
-      "-DENABLE_OPENMP:BOOL=OFF"
-      "-DBUILD_SHARED_LIBS:BOOL=OFF"
+
+      "-DBUILD_SHARED_LIBS:BOOL=OFF" # static libs
+      "-DBUILD_TESTS:BOOL=OFF" # no tests
+      
+      "-DENABLE_THREADS:BOOL=ON" # Use pthread
+      "-DWITH_COMBINED_THREADS:BOOL=ON" # 
+
+      "-DENABLE_FLOAT:BOOL=ON" # <float>
+
+      "-DENABLE_SSE:BOOL=OFF" #ON
+      "-DENABLE_SSE2:BOOL=OFF" #ON
+      "-DENABLE_AVX:BOOL=OFF" #ON
+      "-DENABLE_AVX2:BOOL=OFF" #ON      
+
       "-DDISABLE_FORTRAN:BOOL=ON"
-      "-DENABLE_SSE:BOOL=ON"
-      "-DENABLE_SSE2:BOOL=ON"
-      "-DENABLE_AVX:BOOL=ON"
-      "-DENABLE_AVX2:BOOL=ON"      
     )
+    message(STATUS "NOTE: Building FFTW<float> without SIMD")
+    
     if(CMAKE_TOOLCHAIN_FILE)
       list(APPEND fftw_CACHE_ARGS 
         "-DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE}"
@@ -41,7 +47,9 @@ if(NOT fftw_POPULATED)
 
     get_property(isMulti GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     if(NOT isMulti)
-      list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
+      #list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
+      list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Debug")
+      message(STATUS "NOTE: Building FFTW<float> in Debug!")
     endif()
 
     if(CMAKE_GENERATOR_PLATFORM)
@@ -69,22 +77,29 @@ if(NOT fftw_POPULATED)
       RESULT_VARIABLE   result
     )
     if(result)
-      #message(FATAL_ERROR "Failed FFTW<float> build, see build log at:\n"
-      #  "    ${fftw_BINARY_DIR}/build_output.log")
       file(READ ${fftw_BINARY_DIR}/build_output.log fftw_log)
-      message(FATAL_ERROR ${fftw_log})
+      message(FATAL_ERROR "Failed FFTW<float> build, see build log:\n"
+        "${fftw_log}")
+    endif()
+    if(ENABLE_FFTW_BUILD_LOG)
+      file(READ ${fftw_BINARY_DIR}/build_output.log fftw_log)
+      message(STATUS "FFTW<float> build log:\n"
+        "${fftw_log}")
     endif()
     message(STATUS "FFTW<float> build complete")
   endif()
 endif()
 # Confirm that we can find FFTW.
-set(FFTW_ROOT "${fftw_BINARY_DIR}/install")
+#set(FFTW_ROOT "${fftw_BINARY_DIR}/install")
 set(FFTW_USE_STATIC_LIBS TRUE)
-find_package(FFTW 
+find_package(FFTW3f
   #QUIET
   REQUIRED 
-  COMPONENTS FLOAT_LIB
+  #COMPONENTS FLOAT_LIB
+  CONFIG
+  PATHS "${fftw_BINARY_DIR}/install"
+  NO_DEFAULT_PATH 
 )
 unset(FFTW_USE_STATIC_LIBS)
-unset(FFTW_ROOT)
+#unset(FFTW_ROOT)
 #check_target(FFTW::Float)

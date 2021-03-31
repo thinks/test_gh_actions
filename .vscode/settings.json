@@ -5,6 +5,7 @@
         "BUILD_TESTING" : "TRUE",     
         "CMAKE_VERBOSE_MAKEFILE" : "TRUE",
         //"BUILD_SHARED_LIBS" : "FALSE",   
+        "ENABLE_FFTW_BUILD_LOG" : "TRUE"
     },
     "files.associations": {
         "future": "cpp"
