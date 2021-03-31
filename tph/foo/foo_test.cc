@@ -6,3 +6,8 @@
 TEST_CASE("foo_test") {
   REQUIRE(tph::FooFunc("hello") == 5);
 }
+
+TEST_CASE("fftwf") {
+
+  REQUIRE(tph::MyFftw() == 0);
+}
