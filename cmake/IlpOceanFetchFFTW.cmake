@@ -4,7 +4,7 @@
 
 FetchContent_Declare(
   fftw
-  URL  http://fftw.org/fftw-3.3.8.tar.gz
+  URL  http://fftw.org/fftw-3.3.9.tar.gz
 )
 FetchContent_GetProperties(fftw)
 if(NOT fftw_POPULATED)
@@ -25,15 +25,14 @@ if(NOT fftw_POPULATED)
 
       "-DENABLE_FLOAT:BOOL=ON" # <float>
 
-      "-DENABLE_SSE:BOOL=OFF" #ON
-      "-DENABLE_SSE2:BOOL=OFF" #ON
-      "-DENABLE_AVX:BOOL=OFF" #ON
-      "-DENABLE_AVX2:BOOL=OFF" #ON      
+      "-DENABLE_SSE:BOOL=ON"
+      "-DENABLE_SSE2:BOOL=ON"
+      "-DENABLE_AVX:BOOL=OFF"
+      "-DENABLE_AVX2:BOOL=OFF"      
 
       "-DDISABLE_FORTRAN:BOOL=ON"
     )
-    message(STATUS "NOTE: Building FFTW<float> without SIMD")
-    
+
     if(CMAKE_TOOLCHAIN_FILE)
       list(APPEND fftw_CACHE_ARGS 
         "-DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE}"
@@ -47,9 +46,9 @@ if(NOT fftw_POPULATED)
 
     get_property(isMulti GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     if(NOT isMulti)
-      #list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
-      list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Debug")
-      message(STATUS "NOTE: Building FFTW<float> in Debug!")
+      list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
+      #list(APPEND fftw_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=Debug")
+      #message(STATUS "NOTE: Building FFTW<float> in Debug!")
     endif()
 
     if(CMAKE_GENERATOR_PLATFORM)
@@ -90,8 +89,6 @@ if(NOT fftw_POPULATED)
   endif()
 endif()
 # Confirm that we can find FFTW.
-#set(FFTW_ROOT "${fftw_BINARY_DIR}/install")
-set(FFTW_USE_STATIC_LIBS TRUE)
 find_package(FFTW3f
   #QUIET
   REQUIRED 
@@ -100,6 +97,3 @@ find_package(FFTW3f
   PATHS "${fftw_BINARY_DIR}/install"
   NO_DEFAULT_PATH 
 )
-unset(FFTW_USE_STATIC_LIBS)
-#unset(FFTW_ROOT)
-#check_target(FFTW::Float)
