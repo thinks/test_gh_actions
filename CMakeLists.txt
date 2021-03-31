@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 option(BUILD_TESTING "Build tests" OFF)
 
 file(STRINGS VERSION.txt tph_version)
-project(tph VERSION ${tph_version} LANGUAGES CXX)
+project(tph VERSION ${tph_version} LANGUAGES C CXX)
 
 # Include current path.
 list(APPEND TPH_COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
