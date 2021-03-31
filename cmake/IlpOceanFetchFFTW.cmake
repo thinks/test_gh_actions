@@ -68,17 +68,13 @@ if(NOT fftw_POPULATED)
       ERROR_FILE        ${fftw_BINARY_DIR}/build_output.log
       RESULT_VARIABLE   result
     )
-    message(STATUS "FFTW<float> build complete")
-    #if(result)
     if(result)
       #message(FATAL_ERROR "Failed FFTW<float> build, see build log at:\n"
       #  "    ${fftw_BINARY_DIR}/build_output.log")
       file(READ ${fftw_BINARY_DIR}/build_output.log fftw_log)
       message(FATAL_ERROR ${fftw_log})
-      #execute_process(COMMAND ${CMAKE_COMMAND} -E cat ${fftw_BINARY_DIR}/build_output.log
-      #  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-      #)  
     endif()
+    message(STATUS "FFTW<float> build complete")
   endif()
 endif()
 # Confirm that we can find FFTW.
