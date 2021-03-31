@@ -5,6 +5,8 @@ jobs:
   test:
     name: Release
     runs-on: ubuntu-latest
+    container:
+      image: aswf/ci-base:2021
     steps:
       - name: Ref Names
         id: ref_names
